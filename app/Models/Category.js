@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Category extends Model {
+    expense () {
+        return this.hasOne('App/Models/Expense')
+    }
 }
 
 module.exports = Category

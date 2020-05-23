@@ -30,3 +30,4 @@ Route.put('/users/:id', 'UserController.update').middleware('auth');
 Route.delete('/users/:id', 'UserController.destroy').middleware('auth');
 
 Route.resource('categories', 'CategoryController').middleware('auth');
+Route.resource('expenses', 'ExpenseController').middleware('auth');

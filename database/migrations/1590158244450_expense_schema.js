@@ -10,6 +10,14 @@ class ExpenseSchema extends Schema {
       table.string('description').notNullable()
       table.float('value').notNullable()
       table
+        .integer('user_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+      table
         .integer('category_id')
         .unsigned()
         .notNullable()
