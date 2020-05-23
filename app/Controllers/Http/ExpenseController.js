@@ -52,18 +52,11 @@ class ExpenseController {
         else {
             return response.status(403).send('Área não autorizada');
         }
-
-          
-          //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-          //await equipaments.load('campus');
-      
       }
     
       async destroy ({ auth, params, response, request }) {    
           const expenseOfUser = await Expense.query().whereRaw('user_id = ? and id = ?', [auth.user.id, params.id]).fetch().then( (expenses) => expenses.toJSON());
-        
-          console.log(expenseOfUser);
-          
+                  
           if(typeof expenseOfUser[0] !== 'undefined') {
               const expense = await Expense.findOrFail(params.id);
               await expense.delete();
@@ -73,10 +66,6 @@ class ExpenseController {
           else {
               return response.status(403).send('Área não autorizada');
           }
-
-
-          //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-          //await equipaments.load('campus');
       }
 }
 

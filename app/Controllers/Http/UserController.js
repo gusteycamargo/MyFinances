@@ -37,8 +37,6 @@ class UserController {
 
             await user.merge(data);
             await user.save();
-            //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-            //await equipaments.load('campus');
     
             return user;
         }
@@ -50,11 +48,7 @@ class UserController {
       async destroy ({ auth, params, response, request }) {
         if(auth.user.id == params.id) {
             const user = await User.findOrFail(auth.user.id);
-        
             await user.delete();
-            //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-            //await equipaments.load('campus');
-        
             return user;
         }
         else {
