@@ -28,3 +28,5 @@ Route.get('/users/:id', 'UserController.show').middleware('auth');
 Route.post('/users', 'UserController.store')
 Route.put('/users/:id', 'UserController.update').middleware('auth');
 Route.delete('/users/:id', 'UserController.destroy').middleware('auth');
+
+Route.resource('categories', 'CategoryController').middleware('auth');

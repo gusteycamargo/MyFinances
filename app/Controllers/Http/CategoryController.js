@@ -12,7 +12,7 @@ class CategoryController {
     async store ({ request, auth }) {
         const data = request.only(["name"]);
         const store = {
-            name: data.username,
+            name: data.name,
             user_id: auth.user.id
         }    
         const category = await Category.create(store);
@@ -35,25 +35,45 @@ class CategoryController {
     //   }
     
       async update ({ auth, params, response, request }) {
-          const category = await Category.query().whereRaw('user_id = ? and id = ?', [auth.user.id, params.id]).fetch();
-          const data = request.only(['name']);
-    
-          await category.merge(data);
-          await category.save();
+        const categoryOfUser = await Category.query().whereRaw('user_id = ? and id = ?', [auth.user.id, params.id]).fetch().then( (categories) => categories.toJSON());
+        
+        if(typeof categoryOfUser[0] !== 'undefined') {
+            const data = request.only(['name']);
+            const category = await Category.findOrFail(params.id);
+
+            await category.merge(data);
+            await category.save();
+                
+            return category;
+        }
+        else {
+            return response.status(403).send('Área não autorizada');
+        }
+
+          
           //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
           //await equipaments.load('campus');
       
-          return category;
       }
     
-      async destroy ({ auth, params, response, request }) {
-          const category = await Category.query().whereRaw('user_id = ? and id = ?', [auth.user.id, params.id]).fetch();
-    
-          await category.delete();
+      async destroy ({ auth, params, response, request }) {    
+          const categoryOfUser = await Category.query().whereRaw('user_id = ? and id = ?', [auth.user.id, params.id]).fetch().then( (categories) => categories.toJSON());
+        
+          console.log(categoryOfUser);
+          
+          if(typeof categoryOfUser[0] !== 'undefined') {
+              const category = await Category.findOrFail(params.id);
+              await category.delete();
+
+              return category;
+          }
+          else {
+              return response.status(403).send('Área não autorizada');
+          }
+
+
           //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
           //await equipaments.load('campus');
-      
-          return category;
       }
 }
 
